@@ -48,3 +48,49 @@ h1 {
     height: 200px;
     width: 200px;
 }
+
+.name {
+    font-size: 36px;
+    font-weight: 400;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.location {
+    font-size: 13px;
+    font-weight: 400;
+    color: #901C1C;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+
+}
+
+.tagline {
+    font-size: 10px;
+    font-weight: 400;
+    color: #000000;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+
+}
+
+.price {
+    font-size: 9px;
+    font-weight: 400;
+    color: #757575;
+    padding: 0;
+    margin: 0;
+}
+
+.profilePicture {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+a {
+    text-decoration: none;
+}
+
