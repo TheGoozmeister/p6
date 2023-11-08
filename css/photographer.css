@@ -129,7 +129,7 @@ form input {
     object-fit: cover;
 }
 
-h2 {
+h1 {
     font-weight: 400;
     font-size: 64px;
     color: #D3573C;
@@ -217,4 +217,13 @@ h3 {
     height: 900px;
     cursor: pointer;
     object-fit: cover;
+}
+
+#message {
+    height: 170px;
+    width: 100%;
+}
+
+h2 {
+    font-size: 64px;
 }

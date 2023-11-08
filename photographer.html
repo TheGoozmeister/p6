@@ -9,11 +9,11 @@
   </head>
   <body>
     <header>
-      <img src="assets/images/logo.png" class="logo" />
+      <a href="index.html"><img src="assets/images/logo.png" class="logo" alt="Fisheye Home page"/></a>
     </header>
     <main id="main">
       <div class="photograph-header">
-        <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
+        <button class="contact_button" onclick="displayModal()" aria-label="Contact Me">Contactez-moi</button>
       </div>
       <div id="sort-options">
         <button id="popularity">Trier par popularité</button>
@@ -24,21 +24,21 @@
     <div id="contact_modal">
 			<div class="modal">
 				<header>
-          <h2>Contactez-moi</h2>
+          <h2>Contactez-moi<br/><span id="photographerName"></span></h2>
           <img src="assets/icons/close.svg" onclick="closeModal()" />
         </header>
 				<form>
 					<div>
-						<label for="firstName">Prénom</label>
-						<input type="text" id="firstName" name="firstName"/>
-            <label for="lastName">Nom</label>
-            <input type="text" id="lastName" name="lastName"/>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email"/>
-            <label for="message">Votre message</label>
-            <textarea id="message" name="message"></textarea>
+						<label for="First Name">Prénom</label>
+						<input type="text" id="firstName" name="First Name"/>
+            <label for="Last Name">Nom</label>
+            <input type="text" id="lastName" name="Last Name"/>
+            <label for="Email">Email</label>
+            <input type="email" id="email" name="Email"/>
+            <label for="Your message">Votre message</label>
+            <textarea id="message" name="Your message"></textarea>
 					</div>
-          <button class="contact_button" id="submitButton">Envoyer</button>
+          <button class="contact_button" id="submitButton" name="send">Envoyer</button>
 				</form>
 			</div>
 		</div>

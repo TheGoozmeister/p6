@@ -13,9 +13,10 @@ function addPhotograherToDOM(photographerDatas) {
     photographerInfos.classList.add('photographerInfos');
     photographerImage.setAttribute('src', `assets/photographers/${photographerDatas.portrait}`);
     photographerImage.classList.add('profilePicture');
+    photographerImage.setAttribute('alt', photographerDatas.name)
 
     photographerInfos.innerHTML = `
-        <h2>${photographerDatas.name}</h2>
+        <h1>${photographerDatas.name}</h1>
         <h3>${photographerDatas.city}, ${photographerDatas.country}</h3>
         <div class="tagline">${photographerDatas.tagline}</div>
     `
@@ -23,6 +24,9 @@ function addPhotograherToDOM(photographerDatas) {
     photographerHeader.insertBefore(photographerInfos, document.querySelector('.contact_button'));
     photographerHeader.appendChild(photographerImage);
 
+    const photographerName = document.getElementById('photographerName');
+
+    photographerName.innerText = photographerDatas.name;
 }
 
 async function getPhotographersDatas() {
@@ -88,13 +92,14 @@ function addMediasToDOM(photographerMedias, photographerName) {
         const img = document.createElement('img');
         img.setAttribute("src", fullPath);
         img.classList.add("cardImage")
+        img.setAttribute("alt", title);
         imageCard.appendChild(img);
 
         const mediaInfos = document.createElement('div');
         const mediaTitle = document.createElement('h3');
         const mediaLikes = document.createElement('div');
         mediaTitle.innerText = title;
-        mediaLikes.innerHTML = `<span class="likesCount">${likes}</span>` + '<img src="assets/icons/heart.png" alt="heart" class="like"/>';
+        mediaLikes.innerHTML = `<span class="likesCount">${likes}</span>` + '<img src="assets/icons/heart.png" alt="likes" class="like"/>';
         mediaInfos.classList.add('cardInfos');
         mediaTitle.classList.add('cardTitle');
         mediaLikes.classList.add('cardLikes');
@@ -128,7 +133,7 @@ function initializeTotalLikes(photographerMedias) {
     return likesCount;
 }
 
-function handleLikes(totalLikes) {
+function handleLikes() {
 
     const likeButtons = document.querySelectorAll(".like");
     
@@ -137,8 +142,9 @@ function handleLikes(totalLikes) {
             const likesCount = event.target.closest(".cardLikes").querySelector(".likesCount");
             const currentLikes = parseInt(likesCount.textContent);
             likesCount.textContent = (currentLikes + 1).toString();
-            document.querySelector('')
-            console.log(totalLikes)
+            const actualTotalLike = document.querySelector('.totalLikesAmount');
+            const currentTotalLikes = parseInt(actualTotalLike.innerText);
+        actualTotalLike.innerText = (currentTotalLikes + 1).toString();
         });
     });
 }
@@ -148,7 +154,12 @@ function addLikesAndPrice(totalLikes, photographerDatas) {
     const likesAndPrice = document.createElement('div');
     likesAndPrice.classList.add('likesAndPrice');
     likesAndPrice.innerHTML = `
-        <div class="totalLikes">${totalLikes} <img src="assets/icons/heart.png" alt="heart" id="like"/></div>
+        <div class="totalLikes">
+            <div class="totalLikesAmount">${totalLikes}</div>
+            <div class="totalLikesImg">
+                <img src="assets/icons/heart.png" alt="likes" id="like"/>
+            </div>
+        </div>
         <div id="price">${price}€ / jour</div>
     `;
     document.querySelector("body").appendChild(likesAndPrice);
@@ -270,17 +281,12 @@ function openLightbox(mediaArray, startIndex, generalPath) {
     document.body.appendChild(lightbox);
 }
 
-
 function updateMediaDisplay(sortedMediaArray, photographerName) {
     const mediaContainer = document.querySelector('.cardsContainer'); 
     mediaContainer.remove();
     console.log(sortedMediaArray)
     addMediasToDOM(sortedMediaArray, photographerName);
 }
-
-
-
-
 
 async function main() {
 
@@ -293,7 +299,7 @@ async function main() {
     addMediasToDOM(photographerMedias, photographerName);
     let totalLikes = initializeTotalLikes(photographerMedias);
     addLikesAndPrice(totalLikes, photographerDatas)
-    handleLikes(totalLikes);
+    handleLikes();
 
     const popularityButton = document.getElementById('popularity');
     const titleButton = document.getElementById('title');    

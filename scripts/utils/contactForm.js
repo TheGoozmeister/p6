@@ -14,7 +14,7 @@ function getUserDatas () {
     const email = document.getElementById("email");
     const message = document.getElementById("message");
     const submitButton = document.getElementById("submitButton");
-
+    
     submitButton.addEventListener("click", function(event) {
         event.preventDefault();
         console.log("Prénom: " + firstName.value);
