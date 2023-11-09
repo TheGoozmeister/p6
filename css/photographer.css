@@ -99,6 +99,10 @@ form input {
     object-fit: cover;
 }
 
+.cardImage:hover{
+    cursor: pointer;
+}
+
 .cardInfos {
     display: flex;
     justify-content: space-between;
@@ -194,10 +198,11 @@ h3 {
     position: fixed;
     top: 0;
     left: 0;
-    background: rgba(253, 252, 252, 0.8);
+    background: rgba(253, 252, 252, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
+    display: flex;
 }
 
 .close-button {
@@ -216,11 +221,19 @@ h3 {
     position: relative;
 }
 
-.lightbox-image {
+.lightbox-image, .lightbox-video {
     width: 1242px;
-    height: 900px;
+    height: 800px;
     cursor: pointer;
     object-fit: cover;
+    position: fixed;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.lightbox-image{
+    object-fit: contain;
 }
 
 #message {
@@ -312,3 +325,50 @@ form {
     top:30%;
 }
 
+#like {
+    filter: grayscale(100%);
+    margin-left: 5px;
+}
+
+.like:hover {
+    cursor: pointer;
+}
+
+.next-button, .prev-button {
+    color: #901C1C;
+    background-color: transparent;
+    border: none;
+    font-size: 64px;
+}
+
+.next-button {
+    position: absolute;
+    right: 5%;
+    top: 45%;
+}
+
+.prev-button {
+    position: absolute;
+    left: 5%;
+    top: 45%;
+}
+
+.next-button:hover, .prev-button:hover {
+    cursor: pointer;
+}
+
+.media-title {
+    position: absolute;
+    bottom: 20px;
+    left: 10%;
+    color: #901C1C;
+    font-size: 24px;
+}
+
+.close-button {
+    color: #901C1C;
+    position: absolute;
+    top: 60px;
+    right: 3%;
+    font-size: 64px;
+}
