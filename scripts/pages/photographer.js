@@ -288,6 +288,24 @@ function updateMediaDisplay(sortedMediaArray, photographerName) {
     addMediasToDOM(sortedMediaArray, photographerName);
 }
 
+function sortDropdown() {
+    const selectedOption = document.getElementById('selected-option');
+    const popularity = document.getElementById('popularity');
+    const title = document.getElementById('title');
+    const date = document.getElementById('date');
+
+    popularity.addEventListener("click", function() {
+        selectedOption.innerHTML = '<span class="dropdownTitle">Popularité</span><span id="dropdownIcon">^</span>'
+    })
+    title.addEventListener("click", function() {
+        selectedOption.innerHTML = '<span class="dropdownTitle">Titre</span><span id="dropdownIcon">^</span>'
+    })
+    date.addEventListener("click", function() {
+        selectedOption.innerHTML = '<span class="dropdownTitle">Date</span><span id="dropdownIcon">^</span>'
+    })
+}
+
+
 async function main() {
 
     const photographerId = getPhotographerId();
@@ -300,6 +318,7 @@ async function main() {
     let totalLikes = initializeTotalLikes(photographerMedias);
     addLikesAndPrice(totalLikes, photographerDatas)
     handleLikes();
+
 
     const popularityButton = document.getElementById('popularity');
     const titleButton = document.getElementById('title');    
@@ -317,7 +336,7 @@ async function main() {
         console.log(sortedMediaArray)
         updateMediaDisplay(sortedMediaArray, photographerName);
     });
-        
+    sortDropdown();
 }
 
 main();

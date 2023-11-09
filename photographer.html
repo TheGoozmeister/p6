@@ -15,11 +15,17 @@
       <div class="photograph-header">
         <button class="contact_button" onclick="displayModal()" aria-label="Contact Me">Contactez-moi</button>
       </div>
-      <div id="sort-options">
-        <button id="popularity">Trier par popularité</button>
-        <button id="title">Trier par titre</button>
-        <button id="sortByDate">Trier par date</button>
-      </div>
+      <div class="sort">
+        <div class="sortLabel">Trier par </div>
+        <div id="sort-options" class="dropdown">
+          <button id="selected-option" class="sortBox"><span class="dropdownTitle">Popularité</span><span id="dropdownIcon">^</span></button>
+          <div class="dropdown-content">
+            <button id="popularity" class="sortBox">Popularité</button>
+            <button id="title" class="sortBox">Titre</button>
+            <button id="date" class="sortBox">Date</button>
+          </div>
+        </div>
+      </div>      
     </main>
     <div id="contact_modal">
 			<div class="modal">
