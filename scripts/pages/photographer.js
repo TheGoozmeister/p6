@@ -64,7 +64,6 @@ function getPhotographerMedias(photographersDatas, photographerId) {
                 const thumbnail = media;
                 thumbnail.image = thumbnail.video.replace("mp4", "jpg");
                 photographerMedias.images.push(thumbnail);
-                console.log(photographerMedias);
             } else if (media.image) {
                 photographerMedias.images.push(media);
             }
@@ -80,7 +79,6 @@ function addMediasToDOM(photographerMedias, photographerName) {
     } else {
         images = photographerMedias;
     }
-
     const imagesContainer = document.createElement('div');
     imagesContainer.classList.add('cardsContainer')
     const generalPath = `assets/images/${photographerName}`;
@@ -114,9 +112,9 @@ function addMediasToDOM(photographerMedias, photographerName) {
 
         img.addEventListener('click', () => {
             if (image.video) {
-                openLightbox(photographerMedias.videos, index, generalPath);
+                openLightbox(image.video, index, generalPath);
             } else {
-                openLightbox(photographerMedias.images, index, generalPath);
+                openLightbox(images, index, generalPath);
             }
         });
     }
@@ -132,7 +130,6 @@ function initializeTotalLikes(photographerMedias) {
     for (let media of photographerMedias.videos) {
         likesCount+=media.likes;
     }
-    console.log(likesCount);
     return likesCount;
 }
 
@@ -186,6 +183,7 @@ function openLightbox(mediaArray, startIndex, generalPath) {
     mediaContainer.classList.add('media-container');
 
     const media = mediaArray[startIndex];
+    console.log(media);
     let fullPath;
 
     if (media.video) {
@@ -310,8 +308,8 @@ function openLightbox(mediaArray, startIndex, generalPath) {
 function updateMediaDisplay(sortedMediaArray, photographerName) {
     const mediaContainer = document.querySelector('.cardsContainer'); 
     mediaContainer.remove();
-    console.log(sortedMediaArray)
     addMediasToDOM(sortedMediaArray, photographerName);
+    handleLikes();
 }
 
 function sortDropdown() {
@@ -350,16 +348,12 @@ async function main() {
     const titleButton = document.getElementById('title');    
     let sortedMediaArray;
     popularityButton.addEventListener('click', () => {
-        console.log("Trier par popularité");
         sortedMediaArray = photographerMedias.images.sort((a,b) => b.likes - a.likes);    
-        console.log(sortedMediaArray);
         updateMediaDisplay(sortedMediaArray, photographerName);
     });
     
     titleButton.addEventListener('click', () => {
-        console.log("Trier par titre");
         sortedMediaArray = photographerMedias.images.sort((a,b) => a.title.localeCompare(b.title));
-        console.log(sortedMediaArray)
         updateMediaDisplay(sortedMediaArray, photographerName);
     });
     sortDropdown();
