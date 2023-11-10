@@ -112,7 +112,7 @@ function addMediasToDOM(photographerMedias, photographerName) {
 
         img.addEventListener('click', () => {
             if (image.video) {
-                openLightbox(image.video, index, generalPath);
+                openLightbox(photographerMedias.videos, index, generalPath);
             } else {
                 openLightbox(images, index, generalPath);
             }
@@ -183,7 +183,8 @@ function openLightbox(mediaArray, startIndex, generalPath) {
     mediaContainer.classList.add('media-container');
 
     const media = mediaArray[startIndex];
-    console.log(media);
+    console.log(mediaArray);
+    console.log(startIndex)
     let fullPath;
 
     if (media.video) {
