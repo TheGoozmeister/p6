@@ -27,6 +27,9 @@ function addPhotograherToDOM(photographerDatas) {
     const photographerName = document.getElementById('photographerName');
 
     photographerName.innerText = photographerDatas.name;
+
+    const modal = document.getElementById("contact_modal");
+    modal.setAttribute('aria-label', 'Contact me ' + photographerName);
 }
 
 async function getPhotographersDatas() {
@@ -77,7 +80,7 @@ function addMediasToDOM(photographerMedias, photographerName) {
     } else {
         images = photographerMedias;
     }
-    console.log(images);
+
     const imagesContainer = document.createElement('div');
     imagesContainer.classList.add('cardsContainer')
     const generalPath = `assets/images/${photographerName}`;
@@ -113,7 +116,7 @@ function addMediasToDOM(photographerMedias, photographerName) {
             if (image.video) {
                 openLightbox(photographerMedias.videos, index, generalPath);
             } else {
-                openLightbox(images, index, generalPath);
+                openLightbox(photographerMedias.images, index, generalPath);
             }
         });
     }
@@ -168,10 +171,12 @@ function addLikesAndPrice(totalLikes, photographerDatas) {
 function openLightbox(mediaArray, startIndex, generalPath) {
     const lightbox = document.createElement('div');
     lightbox.classList.add('lightbox');
+    lightbox.setAttribute("aria-label", "image closeup view");
 
     const closeButton = document.createElement('button');
     closeButton.classList.add('close-button');
     closeButton.innerText = "X";
+    closeButton.setAttribute('aria-label', 'Close dialog'); 
 
     closeButton.addEventListener('click', () => {
         lightbox.style.display = "none";
@@ -184,6 +189,7 @@ function openLightbox(mediaArray, startIndex, generalPath) {
     let fullPath;
 
     if (media.video) {
+        mediaContainer.classList.add('video-media');
         fullPath = generalPath + `/${media.video}`;
         const video = document.createElement('video');
         video.setAttribute('controls', 'true');
@@ -195,10 +201,12 @@ function openLightbox(mediaArray, startIndex, generalPath) {
         video.appendChild(source);
         mediaContainer.appendChild(video);
     } else {
+        mediaContainer.classList.add('image-media');
         fullPath = generalPath + `/${media.image}`;
         const img = document.createElement('img');
         img.setAttribute('src', fullPath);
         img.classList.add('lightbox-image');
+        img.setAttribute('alt', media.image)
         mediaContainer.appendChild(img);
     }
 
@@ -210,69 +218,87 @@ function openLightbox(mediaArray, startIndex, generalPath) {
     const prevButton = document.createElement('button');
     prevButton.classList.add('prev-button');
     prevButton.innerHTML = '&lt;';
-
+    prevButton.setAttribute('aria-label', "Previous image");
+    
     const nextButton = document.createElement('button');
     nextButton.classList.add('next-button');
     nextButton.innerHTML = '&gt;';
+    nextButton.setAttribute('aria-label', "Next image");
+
 
     let currentIndex = startIndex;
 
     function updateMedia(index) {
-        const media = mediaArray[index];
-        let fullPath;
-    
-        if (media.video) {
-            fullPath = generalPath + `/${media.video}`;
-            const video = mediaContainer.querySelector('.lightbox-video');
-            const img = mediaContainer.querySelector('.lightbox-image');
-    
-            if (video) {
-                video.querySelector('source').setAttribute('src', fullPath);
-            } else {
-                // Créez un nouvel élément vidéo et ajoutez-le à la lightbox
-                const newVideo = document.createElement('video');
-                newVideo.setAttribute('controls', 'true');
-                newVideo.setAttribute('autoplay', 'true');
-                newVideo.classList.add('lightbox-video');
-                const source = document.createElement('source');
-                source.setAttribute('src', fullPath);
-                source.setAttribute('type', 'video/mp4');
-                newVideo.appendChild(source);
-                mediaContainer.appendChild(newVideo);
-    
-                if (img) {
-                    // Masquez l'élément image s'il existe
-                    img.style.display = 'none';
-                }
-            }
-        } else {
-            fullPath = generalPath + `/${media.image}`;
-            const img = mediaContainer.querySelector('.lightbox-image');
-            if (img) {
-                img.setAttribute('src', fullPath);
-                img.style.display = 'block'; // Assurez-vous que l'élément image est visible
-            } else {
-                // Créez un nouvel élément image et ajoutez-le à la lightbox
-                const newImg = document.createElement('img');
-                newImg.setAttribute('src', fullPath);
-                newImg.classList.add('lightbox-image');
-                mediaContainer.appendChild(newImg);
-            }
-        }
-        titleElement.innerText = media.title;
-        currentIndex = index;
-    }
-    
+    const media = mediaArray[index];
+    const mediaContainer = document.querySelector('.media-container');
 
-    prevButton.addEventListener('click', () => {
+    const video = mediaContainer.querySelector('.lightbox-video');
+    const img = mediaContainer.querySelector('.lightbox-image');
+
+    if (media.video) {
+        if (video) {
+            video.style.display = 'block';
+        }
+
+        if (img) {
+            img.style.display = 'none';
+        }
+
+        let fullPath = generalPath + `/${media.video}`;
+
+        if (video) {
+            video.querySelector('source').setAttribute('src', fullPath);
+        } else {
+            const newVideo = document.createElement('video');
+            newVideo.setAttribute('controls', 'true');
+            newVideo.setAttribute('autoplay', 'true');
+            newVideo.classList.add('lightbox-video');
+            const source = document.createElement('source');
+            source.setAttribute('src', fullPath);
+            source.setAttribute('type', 'video/mp4');
+            newVideo.appendChild(source);
+            mediaContainer.appendChild(newVideo);
+        }
+    } else {
+        if (video) {
+            video.style.display = 'none';
+        }
+
+        if (img) {
+            img.style.display = 'block';
+            img.setAttribute('src', generalPath + `/${media.image}`);
+        } else {
+            const newImg = document.createElement('img');
+            newImg.setAttribute('src', generalPath + `/${media.image}`);
+            newImg.classList.add('lightbox-image');
+            mediaContainer.appendChild(newImg);
+        }
+    }
+
+    titleElement.innerText = media.title;
+    currentIndex = index;
+}
+    
+    function handlePrevious() {
         const prevIndex = (currentIndex - 1 + mediaArray.length) % mediaArray.length;
         updateMedia(prevIndex);
-    });
+    }
 
-    nextButton.addEventListener('click', () => {
+    function handleNext() {
         const nextIndex = (currentIndex + 1) % mediaArray.length;
         updateMedia(nextIndex);
-    })
+    }
+
+    prevButton.addEventListener('click', handlePrevious);
+    nextButton.addEventListener('click', handleNext);
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft') {
+            handlePrevious();
+        } else if (event.key === 'ArrowRight') {
+            handleNext();
+        }
+    });
 
     lightbox.appendChild(prevButton);
     lightbox.appendChild(closeButton);
