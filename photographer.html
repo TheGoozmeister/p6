@@ -17,12 +17,12 @@
       </div>
       <div class="sort">
         <div class="sortLabel">Trier par </div>
-        <div id="sort-options" class="dropdown">
+        <div id="sort-options" class="dropdown" role=”button”, aria-haspopup=”listbox”, aria-expanded>
           <button id="selected-option" class="sortBox"><span class="dropdownTitle">Popularité</span><span id="dropdownIcon">^</span></button>
           <div class="dropdown-content">
-            <button id="popularity" class="sortBox">Popularité</button>
-            <button id="title" class="sortBox">Titre</button>
-            <button id="date" class="sortBox">Date</button>
+            <button id="popularity" class="sortBox" role=”listbox”, aria-activedescendant, aria-selected>Popularité</button>
+            <button id="title" class="sortBox" role=”listbox”, aria-activedescendant, aria-selected>Titre</button>
+            <button id="date" class="sortBox" role=”listbox”, aria-activedescendant, aria-selected>Date</button>
           </div>
         </div>
       </div>      
