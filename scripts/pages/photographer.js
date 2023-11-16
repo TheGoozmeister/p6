@@ -1,3 +1,6 @@
+import { mediaCard } from "../templates/media.js";
+
+
 function getPhotographerDatas(photographersDatas, photographerId) {  
     for (let photographer of photographersDatas.photographers) {
         if (photographer.id==photographerId) {
@@ -79,47 +82,11 @@ function addMediasToDOM(photographerMedias, photographerName) {
     } else {
         images = photographerMedias;
     }
-    const imagesContainer = document.createElement('div');
-    imagesContainer.classList.add('cardsContainer')
     const generalPath = `assets/images/${photographerName}`;
 
     for (let [index, image] of images.entries()) {
-        const {title, likes, date, price} = image;
-        const imageCard = document.createElement('div');
-        imageCard.classList.add('card');
-
-        let fullPath = generalPath + `/${image.image}`;
-        
-        const img = document.createElement('img');
-        img.setAttribute("src", fullPath);
-        img.classList.add("cardImage")
-        img.setAttribute("alt", title);
-        imageCard.appendChild(img);
-
-        const mediaInfos = document.createElement('div');
-        const mediaTitle = document.createElement('h3');
-        const mediaLikes = document.createElement('div');
-        mediaTitle.innerText = title;
-        mediaLikes.innerHTML = `<span class="likesCount">${likes}</span>` + '<img src="assets/icons/heart.png" alt="likes" class="like"/>';
-        mediaInfos.classList.add('cardInfos');
-        mediaTitle.classList.add('cardTitle');
-        mediaLikes.classList.add('cardLikes');
-        mediaInfos.appendChild(mediaTitle);
-        mediaInfos.appendChild(mediaLikes);
-        imageCard.appendChild(mediaInfos);
-
-        imagesContainer.appendChild(imageCard);
-
-        img.addEventListener('click', () => {
-            if (image.video) {
-                openLightbox(photographerMedias.videos, index, generalPath);
-            } else {
-                openLightbox(images, index, generalPath);
-            }
-        });
+        mediaCard(index, image, generalPath, images, photographerMedias);
     }
-    const body = document.querySelector("body");
-    body.appendChild(imagesContainer);
 }
 
 function initializeTotalLikes(photographerMedias) {
@@ -144,8 +111,18 @@ function handleLikes() {
             likesCount.textContent = (currentLikes + 1).toString();
             const actualTotalLike = document.querySelector('.totalLikesAmount');
             const currentTotalLikes = parseInt(actualTotalLike.innerText);
-        actualTotalLike.innerText = (currentTotalLikes + 1).toString();
+            actualTotalLike.innerText = (currentTotalLikes + 1).toString();
         });
+        button.addEventListener('keydown', (event)=>{
+            if (event.key === "Enter") {
+                const likesCount = event.target.closest(".cardLikes").querySelector(".likesCount");
+                const currentLikes = parseInt(likesCount.textContent);
+                likesCount.textContent = (currentLikes + 1).toString();
+                const actualTotalLike = document.querySelector('.totalLikesAmount');
+                const currentTotalLikes = parseInt(actualTotalLike.innerText);
+                actualTotalLike.innerText = (currentTotalLikes + 1).toString();
+            }
+        })
     });
 }
 
@@ -165,150 +142,9 @@ function addLikesAndPrice(totalLikes, photographerDatas) {
     document.querySelector("body").appendChild(likesAndPrice);
 }
 
-function openLightbox(mediaArray, startIndex, generalPath) {
-    const lightbox = document.createElement('div');
-    lightbox.classList.add('lightbox');
-    lightbox.setAttribute("aria-label", "image closeup view");
-
-    const closeButton = document.createElement('button');
-    closeButton.classList.add('close-button');
-    closeButton.innerText = "X";
-    closeButton.setAttribute('aria-label', 'Close dialog'); 
-
-    closeButton.addEventListener('click', () => {
-        lightbox.style.display = "none";
-    });
-
-    const mediaContainer = document.createElement('div');
-    mediaContainer.classList.add('media-container');
-
-    const media = mediaArray[startIndex];
-    console.log(mediaArray);
-    console.log(startIndex)
-    let fullPath;
-
-    if (media.video) {
-        mediaContainer.classList.add('video-media');
-        fullPath = generalPath + `/${media.video}`;
-        const video = document.createElement('video');
-        video.setAttribute('controls', 'true');
-        video.setAttribute('autoplay', 'true');
-        video.classList.add('lightbox-video');
-        const source = document.createElement('source');
-        source.setAttribute('src', fullPath);
-        source.setAttribute('type', 'video/mp4');
-        video.appendChild(source);
-        mediaContainer.appendChild(video);
-    } else {
-        mediaContainer.classList.add('image-media');
-        fullPath = generalPath + `/${media.image}`;
-        const img = document.createElement('img');
-        img.setAttribute('src', fullPath);
-        img.classList.add('lightbox-image');
-        img.setAttribute('alt', media.image)
-        mediaContainer.appendChild(img);
-    }
-
-    const titleElement = document.createElement('div');
-    titleElement.classList.add('media-title');
-    titleElement.innerText = media.title;
-    mediaContainer.appendChild(titleElement);
-
-    const prevButton = document.createElement('button');
-    prevButton.classList.add('prev-button');
-    prevButton.innerHTML = '&lt;';
-    prevButton.setAttribute('aria-label', "Previous image");
-    
-    const nextButton = document.createElement('button');
-    nextButton.classList.add('next-button');
-    nextButton.innerHTML = '&gt;';
-    nextButton.setAttribute('aria-label', "Next image");
-
-
-    let currentIndex = startIndex;
-
-    function updateMedia(index) {
-    const media = mediaArray[index];
-    const mediaContainer = document.querySelector('.media-container');
-
-    const video = mediaContainer.querySelector('.lightbox-video');
-    const img = mediaContainer.querySelector('.lightbox-image');
-
-    if (media.video) {
-        if (video) {
-            video.style.display = 'block';
-        }
-
-        if (img) {
-            img.style.display = 'none';
-        }
-
-        let fullPath = generalPath + `/${media.video}`;
-
-        if (video) {
-            video.querySelector('source').setAttribute('src', fullPath);
-        } else {
-            const newVideo = document.createElement('video');
-            newVideo.setAttribute('controls', 'true');
-            newVideo.setAttribute('autoplay', 'true');
-            newVideo.classList.add('lightbox-video');
-            const source = document.createElement('source');
-            source.setAttribute('src', fullPath);
-            source.setAttribute('type', 'video/mp4');
-            newVideo.appendChild(source);
-            mediaContainer.appendChild(newVideo);
-        }
-    } else {
-        if (video) {
-            video.style.display = 'none';
-        }
-
-        if (img) {
-            img.style.display = 'block';
-            img.setAttribute('src', generalPath + `/${media.image}`);
-        } else {
-            const newImg = document.createElement('img');
-            newImg.setAttribute('src', generalPath + `/${media.image}`);
-            newImg.classList.add('lightbox-image');
-            mediaContainer.appendChild(newImg);
-        }
-    }
-
-    titleElement.innerText = media.title;
-    currentIndex = index;
-}
-    
-    function handlePrevious() {
-        const prevIndex = (currentIndex - 1 + mediaArray.length) % mediaArray.length;
-        updateMedia(prevIndex);
-    }
-
-    function handleNext() {
-        const nextIndex = (currentIndex + 1) % mediaArray.length;
-        updateMedia(nextIndex);
-    }
-
-    prevButton.addEventListener('click', handlePrevious);
-    nextButton.addEventListener('click', handleNext);
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft') {
-            handlePrevious();
-        } else if (event.key === 'ArrowRight') {
-            handleNext();
-        }
-    });
-
-    lightbox.appendChild(prevButton);
-    lightbox.appendChild(closeButton);
-    lightbox.appendChild(mediaContainer);
-    lightbox.appendChild(nextButton);
-    document.body.appendChild(lightbox);
-}
-
 function updateMediaDisplay(sortedMediaArray, photographerName) {
     const mediaContainer = document.querySelector('.cardsContainer'); 
-    mediaContainer.remove();
+    mediaContainer.innerHTML = '';
     addMediasToDOM(sortedMediaArray, photographerName);
     handleLikes();
 }
@@ -318,7 +154,45 @@ function sortDropdown() {
     const popularity = document.getElementById('popularity');
     const title = document.getElementById('title');
     const date = document.getElementById('date');
+    const options = document.querySelector('.dropdown-content');
 
+    selectedOption.addEventListener("keydown", (event)=>{
+        if (event.key === "Enter") {
+            event.preventDefault();     
+            options.style.display = 'block';
+            popularity.focus();
+        } else if (event.key === "Escape") {
+            options.style.display = "none";  
+        }
+    })
+
+    popularity.addEventListener('keydown', (event) => {
+        if (event.key === "ArrowDown") {
+            title.focus();
+        } else if (event.key === "Escape") {
+            event.preventDefault();
+            options.style.display = "none";
+        }
+    })
+
+    title.addEventListener('keydown', (event) => {
+        if (event.key === "ArrowDown") {
+            date.focus();
+        } else if (event.key === "ArrowUp") {
+            popularity.focus();
+        } else if (event.key === "Escape") {
+            options.style.display = "none";
+        }
+    })
+
+    date.addEventListener('keydown', (event) => {
+        if (event.key === "ArrowUp") {
+            title.focus();
+        } else if (event.key === "Escape") {
+            options.style.display = "none";
+        }
+    })
+    
     popularity.addEventListener("click", function() {
         selectedOption.innerHTML = '<span class="dropdownTitle">Popularité</span><span id="dropdownIcon">^</span>'
     })
@@ -328,8 +202,9 @@ function sortDropdown() {
     date.addEventListener("click", function() {
         selectedOption.innerHTML = '<span class="dropdownTitle">Date</span><span id="dropdownIcon">^</span>'
     })
-}
 
+    
+}
 
 async function main() {
 

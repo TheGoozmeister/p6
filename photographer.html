@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
   <head>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <meta charset="utf-8">
@@ -17,15 +17,19 @@
       </div>
       <div class="sort">
         <div class="sortLabel">Trier par </div>
-        <div id="sort-options" class="dropdown" role=”button”, aria-haspopup=”listbox”, aria-expanded>
-          <button id="selected-option" class="sortBox"><span class="dropdownTitle">Popularité</span><span id="dropdownIcon">^</span></button>
+        <div id="sort-options" class="dropdown" role="button" aria-haspopup="listbox" aria-expanded="false">
+          <button id="selected-option" class="sortBox" aria-haspopup="listbox" aria-controls="sort-options-listbox" tabindex="0">
+            <span class="dropdownTitle">Popularité</span><span id="dropdownIcon">^</span>
+          </button>
           <div class="dropdown-content">
-            <button id="popularity" class="sortBox" role=”listbox”, aria-activedescendant, aria-selected>Popularité</button>
-            <button id="title" class="sortBox" role=”listbox”, aria-activedescendant, aria-selected>Titre</button>
-            <button id="date" class="sortBox" role=”listbox”, aria-activedescendant, aria-selected>Date</button>
+            <button id="popularity" class="sortBox" role="option" tabindex="-1" aria-selected="true">Popularité</button>
+            <button id="title" class="sortBox" role="option" tabindex="-1" aria-selected="false">Titre</button>
+            <button id="date" class="sortBox" role="option" tabindex="-1" aria-selected="false">Date</button>
           </div>
         </div>
-      </div>      
+      </div>
+      <div class="cardsContainer">
+      </div>
     </main>
     <div id="contact_modal">
 			<div class="modal">
@@ -39,20 +43,20 @@
         </header>
 				<form>
 					<div>
-						<label for="First Name">Prénom</label>
-						<input type="text" id="firstName" name="First Name"/>
-            <label for="Last Name">Nom</label>
-            <input type="text" id="lastName" name="Last Name"/>
-            <label for="Email">Email</label>
+						<label for="firstName">Prénom</label>
+						<input type="text" id="firstName" name="FirstName" />
+            <label for="lastName">Nom</label>
+            <input type="text" id="lastName" name="LastName"/>
+            <label for="email">Email</label>
             <input type="email" id="email" name="Email"/>
-            <label for="Your message">Votre message</label>
-            <textarea id="message" name="Your message"></textarea>
+            <label for="message">Votre message</label>
+            <textarea id="message" name="Your_Message"></textarea>
 					</div>
           <button class="contact_button" id="submitButton" name="send">Envoyer</button>
 				</form>
 			</div>
 		</div>
-    <script src="./scripts/pages/photographer.js"></script>
+    <script src="./scripts/pages/photographer.js" type="module"></script>
     <script src="./scripts/utils/contactForm.js"></script>
   </body>
 </html>

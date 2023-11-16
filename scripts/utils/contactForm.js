@@ -14,7 +14,6 @@ function getUserDatas () {
     const email = document.getElementById("email");
     const message = document.getElementById("message");
     const submitButton = document.getElementById("submitButton");
-    
     submitButton.addEventListener("click", function(event) {
         event.preventDefault();
         console.log("Prénom: " + firstName.value);
@@ -25,4 +24,15 @@ function getUserDatas () {
     
 }
 
-getUserDatas();
+function main () {
+    getUserDatas();
+
+    const modal = document.getElementById("contact_modal");
+    document.addEventListener('keydown', event => {
+        if (event.key === "Escape") {
+            modal.style.display = "none";
+        }
+    })
+}
+
+main();
