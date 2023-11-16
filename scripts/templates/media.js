@@ -11,7 +11,7 @@ export function mediaCard(index, image, generalPath, images, photographerMedias)
         closeButton.setAttribute('aria-label', 'Close dialog'); 
     
         closeButton.addEventListener('click', () => {
-            lightbox.innerHTML='';
+            lightbox.remove();
             lightbox.style.display = "none";
         });
     
@@ -62,55 +62,55 @@ export function mediaCard(index, image, generalPath, images, photographerMedias)
         let currentIndex = startIndex;
     
         function updateMedia(index) {
-        const media = mediaArray[index];
-        const mediaContainer = document.querySelector('.media-container');
-    
-        const video = mediaContainer.querySelector('.lightbox-video');
-        const img = mediaContainer.querySelector('.lightbox-image');
-    
-        if (media.video) {
-            if (video) {
-                video.style.display = 'block';
-            }
-    
-            if (img) {
-                img.style.display = 'none';
-            }
-    
-            let fullPath = generalPath + `/${media.video}`;
-    
-            if (video) {
-                video.querySelector('source').setAttribute('src', fullPath);
+            const media = mediaArray[index];
+            const mediaContainer = document.querySelector('.media-container');
+        
+            const video = mediaContainer.querySelector('.lightbox-video');
+            const img = mediaContainer.querySelector('.lightbox-image');
+        
+            if (media.video) {
+                if (video) {
+                    video.style.display = 'block';
+                }
+        
+                if (img) {
+                    img.style.display = 'none';
+                }
+        
+                let fullPath = generalPath + `/${media.video}`;
+        
+                if (video) {
+                    video.querySelector('source').setAttribute('src', fullPath);
+                } else {
+                    const newVideo = document.createElement('video');
+                    newVideo.setAttribute('controls', 'true');
+                    newVideo.setAttribute('autoplay', 'true');
+                    newVideo.classList.add('lightbox-video');
+                    const source = document.createElement('source');
+                    source.setAttribute('src', fullPath);
+                    source.setAttribute('type', 'video/mp4');
+                    newVideo.appendChild(source);
+                    mediaContainer.appendChild(newVideo);
+                }
             } else {
-                const newVideo = document.createElement('video');
-                newVideo.setAttribute('controls', 'true');
-                newVideo.setAttribute('autoplay', 'true');
-                newVideo.classList.add('lightbox-video');
-                const source = document.createElement('source');
-                source.setAttribute('src', fullPath);
-                source.setAttribute('type', 'video/mp4');
-                newVideo.appendChild(source);
-                mediaContainer.appendChild(newVideo);
-            }
-        } else {
-            if (video) {
-                video.style.display = 'none';
+                if (video) {
+                    video.style.display = 'none';
+                }
+        
+                if (img) {
+                    img.style.display = 'block';
+                    img.setAttribute('src', generalPath + `/${media.image}`);
+                } else {
+                    const newImg = document.createElement('img');
+                    newImg.setAttribute('src', generalPath + `/${media.image}`);
+                    newImg.classList.add('lightbox-image');
+                    mediaContainer.appendChild(newImg);
+                }
             }
     
-            if (img) {
-                img.style.display = 'block';
-                img.setAttribute('src', generalPath + `/${media.image}`);
-            } else {
-                const newImg = document.createElement('img');
-                newImg.setAttribute('src', generalPath + `/${media.image}`);
-                newImg.classList.add('lightbox-image');
-                mediaContainer.appendChild(newImg);
-            }
+            titleElement.innerText = media.title;
+            currentIndex = index;
         }
-    
-        titleElement.innerText = media.title;
-        currentIndex = index;
-    }
         
         function handlePrevious() {
             const prevIndex = (currentIndex - 1 + mediaArray.length) % mediaArray.length;
@@ -131,7 +131,7 @@ export function mediaCard(index, image, generalPath, images, photographerMedias)
             } else if (event.key === 'ArrowRight') {
                 handleNext();
             } else if (event.key === 'Escape') { // Ajoutez cette condition pour la touche "Échap"
-                mediaContainer.innerHTML='';        
+                mediaContainer.remove();        
                 lightbox.style.display = "none";
             }
         });
