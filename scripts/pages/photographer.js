@@ -14,9 +14,11 @@ function addPhotograherToDOM(photographerDatas) {
     const photographerInfos = document.createElement('div');
     const photographerImage = document.createElement('img');
     photographerInfos.classList.add('photographerInfos');
+    photographerInfos.setAttribute('tabindex', '0');
     photographerImage.setAttribute('src', `assets/photographers/${photographerDatas.portrait}`);
     photographerImage.classList.add('profilePicture');
     photographerImage.setAttribute('alt', photographerDatas.name)
+    photographerImage.setAttribute('tabindex', '0');
 
     photographerInfos.innerHTML = `
         <h1>${photographerDatas.name}</h1>

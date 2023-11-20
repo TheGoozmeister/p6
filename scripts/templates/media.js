@@ -3,9 +3,7 @@ export function mediaCard(index, image, generalPath, images, photographerMedias)
     function openLightbox(mediaArray, startIndex, generalPath) {
         const lightbox = document.createElement('div');
         lightbox.classList.add('lightbox');
-        lightbox.setAttribute("aria-label", "image closeup view");
-    
-        const closeButton = document.createElement('button');
+        lightbox.setAttribute("aria-label", "image closeup view");        const closeButton = document.createElement('button');
         closeButton.classList.add('close-button');
         closeButton.innerText = "X";
         closeButton.setAttribute('aria-label', 'Close dialog'); 
@@ -17,7 +15,6 @@ export function mediaCard(index, image, generalPath, images, photographerMedias)
     
         const mediaContainer = document.createElement('div');
         mediaContainer.classList.add('media-container');
-        
         const media = mediaArray[startIndex];
         let fullPath;
     
@@ -28,6 +25,7 @@ export function mediaCard(index, image, generalPath, images, photographerMedias)
             video.setAttribute('controls', 'true');
             video.setAttribute('autoplay', 'true');
             video.classList.add('lightbox-video');
+            video.setAttribute('tabindex', '0');
             const source = document.createElement('source');
             source.setAttribute('src', fullPath);
             source.setAttribute('type', 'video/mp4');
@@ -39,6 +37,7 @@ export function mediaCard(index, image, generalPath, images, photographerMedias)
             const img = document.createElement('img');
             img.setAttribute('src', fullPath);
             img.classList.add('lightbox-image');
+            img.setAttribute('tabindex', '0');
             img.setAttribute('alt', media.image)
             mediaContainer.appendChild(img);
         }
@@ -47,7 +46,8 @@ export function mediaCard(index, image, generalPath, images, photographerMedias)
         titleElement.classList.add('media-title');
         titleElement.innerText = media.title;
         mediaContainer.appendChild(titleElement);
-    
+        titleElement.setAttribute('tabindex', '0');
+
         const prevButton = document.createElement('button');
         prevButton.classList.add('prev-button');
         prevButton.innerHTML = '&lt;';
@@ -142,6 +142,13 @@ export function mediaCard(index, image, generalPath, images, photographerMedias)
         lightbox.appendChild(mediaContainer);
         lightbox.appendChild(nextButton);
         document.body.appendChild(lightbox);
+
+        const focus = document.querySelector('.lightbox-image');
+        if (!focus) {
+            const toFocus = document.querySelector('.lightbox-video');
+            toFocus.focus();                        
+        }
+        focus.focus();
     }
 
     const {title, likes, date, price} = image;
@@ -162,9 +169,10 @@ export function mediaCard(index, image, generalPath, images, photographerMedias)
     const mediaTitle = document.createElement('h3');
     const mediaLikes = document.createElement('div');
     mediaTitle.innerText = title;
-    mediaLikes.innerHTML = `<span class="likesCount">${likes}</span>` + '<img src="assets/icons/heart.png" alt="likes" class="like" tabindex="0"    /> ';
+    mediaLikes.innerHTML = `<span class="likesCount" tabindex="0">${likes}</span>` + '<img src="assets/icons/heart.png" alt="likes" class="like" tabindex="0"    /> ';
     mediaInfos.classList.add('cardInfos');
     mediaTitle.classList.add('cardTitle');
+    mediaTitle.setAttribute('tabindex', '0');
     mediaLikes.classList.add('cardLikes');
     mediaInfos.appendChild(mediaTitle);
     mediaInfos.appendChild(mediaLikes);
